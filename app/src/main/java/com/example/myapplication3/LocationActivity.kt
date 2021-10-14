@@ -17,88 +17,57 @@ import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication3.adapters.Item
 import com.example.myapplication3.adapters.ItemListAdapter
+import com.example.myapplication3.models.LogItem
+import com.example.myapplication3.services.TrackService
+import com.example.myapplication3.utils.Preferences
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_location.*
 import java.util.concurrent.TimeUnit
 
 class LocationActivity : AppCompatActivity() {
     private var adapter: ItemListAdapter? = null
-    private var items = ArrayList<Item>()
+    private var items:ArrayList<LogItem>? = ArrayList<LogItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_location)
-        startLocation()
+        setupView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showLogs()
+        TrackService.initLogListener(LogListener())
+    }
+
+    override fun onPause() {
+        super.onPause()
+        TrackService.destLogListener()
     }
 
     private fun setupView() {
         adapter = ItemListAdapter()
         rv_location.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rv_location.adapter = adapter
-
-        val item_1 = Item()
-        val item_2 = Item()
-
-        item_1.latitude = "123"
-        item_1.longitude = "345"
-
-        item_2.latitude = "123"
-        item_2.longitude = "345"
-
-        items.add(item_1)
-        items.add(item_2)
-        if (adapter != null) {
-            adapter!!.setItems(items)
-        }
     }
 
-    @SuppressLint("MissingPermission")
-    private fun startLocation() {
-        requestForegroundPermissions()
-        if (foregroundPermissionApproved()) {
-            if (checkGpsStatus(this)) {
-                setupView()
-                //startService(Intent(applicationContext, LocationServices::class.java))
-            } else {
-                Toast.makeText(this, "GPS disabled", Toast.LENGTH_SHORT).show()
+    fun showLogs() {
+        if(adapter != null) {
+            items = Preferences(applicationContext).getLogLocation()
+            if(items != null && items!!.size > 0) {
+                adapter?.setItems(items!!)
             }
-        } else {
-            return
-        }
-
-
-
-
-    }
-
-
-
-
-
-    private fun foregroundPermissionApproved(): Boolean {
-        return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        )
-    }
-
-    private fun requestForegroundPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            this.requestPermissions(
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                0
-            )
         }
     }
 
-    @SuppressLint("ServiceCast")
-    fun checkGpsStatus(context: Context): Boolean {
-        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            return true
+    private inner class LogListener: LogInterfece {
+        override fun addLog(logItem: LogItem) {
+            showLogs()
         }
-        return false
+
     }
 
+    interface LogInterfece {
+        fun addLog(logItem: LogItem)
+    }
 }

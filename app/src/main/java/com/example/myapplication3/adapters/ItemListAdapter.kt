@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.view.menu.MenuView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication3.R
+import com.example.myapplication3.models.LogItem
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.item_location.view.*
 import kotlinx.android.synthetic.main.item_location.view.tv_latitude
@@ -17,7 +18,7 @@ import kotlinx.android.synthetic.main.item_location.view.tv_longitude
 
 class ItemListAdapter internal constructor() :
     RecyclerView.Adapter<ItemListAdapter.ViewHolderRecycleView>() {
-    private var items = emptyList<Item>()
+    private var items = emptyList<LogItem>()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -31,10 +32,10 @@ class ItemListAdapter internal constructor() :
     override fun onBindViewHolder(holder: ItemListAdapter.ViewHolderRecycleView, position: Int) {
         val currentItem = items[position]
 
-        if (currentItem.latitude != null){
+        if (currentItem.latitude != ""){
             holder.tv_latitude.text = currentItem.latitude
         }
-        if (currentItem.longitude !=null){
+        if (currentItem.longitude !=""){
             holder.tv_longitude.text = currentItem.longitude
         }
     }
@@ -50,7 +51,7 @@ class ItemListAdapter internal constructor() :
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setItems(_items:List<Item>) {
+    fun setItems(_items:List<LogItem>) {
         items = _items
         notifyDataSetChanged()
     }

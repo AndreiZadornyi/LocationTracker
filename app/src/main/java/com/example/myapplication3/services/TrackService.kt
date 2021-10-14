@@ -10,6 +10,7 @@ import android.app.ActivityManager
 import android.location.Location
 import android.os.Looper
 import androidx.core.content.ContextCompat.getSystemService
+import com.example.myapplication3.LocationActivity
 import com.example.myapplication3.adapters.Item
 import com.example.myapplication3.models.LogItem
 import com.example.myapplication3.utils.Preferences
@@ -81,7 +82,7 @@ class TrackService : Service() {
     fun getLongitude(location: Location): String = location.longitude.toDouble().toString() +"°"
 
     fun addItem(latitude: String, longitude: String) {
-//        val item = Item()
+
         val item = LogItem()
 
         item.latitude = latitude
@@ -90,17 +91,15 @@ class TrackService : Service() {
 
         _context?.let { Preferences(it).addItem(item) }
 
-//        items.add(item)
-//
-//        if (adapter != null) {
-//            adapter!!.setItems(items)
-//        }
-
+        if(logListener != null) {
+            logListener?.addLog(item)
+        }
     }
 
     companion object {
         @SuppressLint("StaticFieldLeak")
         var _context:Context? = null
+        var logListener: LocationActivity.LogInterfece? = null
 
         fun start(context: Context){
             _context = context
@@ -123,5 +122,14 @@ class TrackService : Service() {
             }
             return false
         }
+
+        fun initLogListener(_logListener: LocationActivity.LogInterfece) {
+            logListener = _logListener
+        }
+
+        fun destLogListener() {
+            logListener = null
+        }
+
     }
 }
