@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit
 
 class LocationActivity : AppCompatActivity() {
     private var adapter: ItemListAdapter? = null
-    private var items:ArrayList<LogItem>? = ArrayList<LogItem>()
+    private var items: ArrayList<LogItem>? = ArrayList<LogItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,15 +52,15 @@ class LocationActivity : AppCompatActivity() {
     }
 
     fun showLogs() {
-        if(adapter != null) {
+        if (adapter != null) {
             items = Preferences(applicationContext).getLogLocation()
-            if(items != null && items!!.size > 0) {
+            if (items != null && items!!.size > 0) {
                 adapter?.setItems(items!!)
             }
         }
     }
 
-    private inner class LogListener: LogInterfece {
+    private inner class LogListener : LogInterfece {
         override fun addLog(logItem: LogItem) {
             showLogs()
         }

@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class Preferences (private val context: Context){
+class Preferences(private val context: Context) {
 
     fun setLogLocation(logs: ArrayList<LogItem>?) {
         var s = ""
@@ -40,7 +40,7 @@ class Preferences (private val context: Context){
 
         var logs = getLogLocation()
 
-        if(logs != null && logs.size > 0) {
+        if (logs != null && logs.size > 0) {
             var index = 0
             while (index < logs.size) {
                 val log = logs.get(index)
@@ -62,7 +62,7 @@ class Preferences (private val context: Context){
         var logs = getLogLocation()
 
 
-        if(logs == null){
+        if (logs == null) {
             logs = ArrayList<LogItem>()
         }
         logs.add(logItem)

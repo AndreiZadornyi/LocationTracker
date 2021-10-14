@@ -77,9 +77,9 @@ class TrackService : Service() {
         }
     }
 
-    fun getLatitude(location: Location): String = location.latitude.toDouble().toString() +"°"
+    fun getLatitude(location: Location): String = location.latitude.toDouble().toString() + "°"
 
-    fun getLongitude(location: Location): String = location.longitude.toDouble().toString() +"°"
+    fun getLongitude(location: Location): String = location.longitude.toDouble().toString() + "°"
 
     fun addItem(latitude: String, longitude: String) {
 
@@ -91,29 +91,29 @@ class TrackService : Service() {
 
         _context?.let { Preferences(it).addItem(item) }
 
-        if(logListener != null) {
+        if (logListener != null) {
             logListener?.addLog(item)
         }
     }
 
     companion object {
         @SuppressLint("StaticFieldLeak")
-        var _context:Context? = null
+        var _context: Context? = null
         var logListener: LocationActivity.LogInterfece? = null
 
-        fun start(context: Context){
+        fun start(context: Context) {
             _context = context
-            val intent = Intent(context,TrackService::class.java)
+            val intent = Intent(context, TrackService::class.java)
             context.startService(intent)
         }
 
-        fun stop(context: Context){
-            val intent = Intent(context,TrackService::class.java)
+        fun stop(context: Context) {
+            val intent = Intent(context, TrackService::class.java)
             context.stopService(intent)
             _context = null
         }
 
-        fun checkStatusService(context: Context, serviceClass: Class<TrackService>) :Boolean {
+        fun checkStatusService(context: Context, serviceClass: Class<TrackService>): Boolean {
             val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
             for (service in manager.getRunningServices(Int.MAX_VALUE)) {
                 if (serviceClass.name.equals(service.service.className)) {

@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun checkStatus() {
-        if(TrackService.checkStatusService(applicationContext,TrackService::class.java)){
+        if (TrackService.checkStatusService(applicationContext, TrackService::class.java)) {
             btn_start_stop?.text = "Stop"
             tv_status.text = "Enabled"
             statusService = true
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
     fun setupView() {
 
         btn_start_stop?.setOnClickListener {
-            if(statusService){
+            if (statusService) {
                 TrackService.stop(applicationContext)
             } else {
                 startLocation()
@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity() {
         return false
     }
 
-    private inner class LogListener: LocationActivity.LogInterfece {
+    private inner class LogListener : LocationActivity.LogInterfece {
         override fun addLog(logItem: LogItem) {
             tv_latitude.text = logItem.latitude
             tv_longitude.text = logItem.longitude
