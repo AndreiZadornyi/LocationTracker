@@ -28,6 +28,12 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         checkStatus()
+        TrackService.initLogListener(LogListener())
+    }
+
+    override fun onPause() {
+        super.onPause()
+        TrackService.destLogListener()
     }
 
     fun checkStatus() {
@@ -54,6 +60,7 @@ class MainActivity : AppCompatActivity() {
             checkStatus()
         }
         btn_log?.setOnClickListener {
+            TrackService.destLogListener()
             val intent = Intent(this@MainActivity, LocationActivity::class.java)
             startActivity(intent)
         }
